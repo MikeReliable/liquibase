@@ -1,0 +1,53 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+
+    <changeSet id="v2-1" author="mike">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableIsEmpty tableName="titanic"/>
+            </not>
+        </preConditions>
+        <modifyDataType columnName="survived"
+                        newDataType="boolean"
+                        schemaName="public"
+                        tableName="titanic"/>
+    </changeSet>
+
+    <changeSet id="v2-2" author="mike">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableIsEmpty tableName="titanic"/>
+            </not>
+        </preConditions>
+        <modifyDataType columnName="pclass"
+                        newDataType="varchar(10)"
+                        schemaName="public"
+                        tableName="titanic"/>
+    </changeSet>
+
+
+    <changeSet id="v2-3" author="mike">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableIsEmpty tableName="titanic"/>
+            </not>
+        </preConditions>
+        <update tableName="titanic">
+            <column name="pclass" value="FIRST"/>
+            <where>pclass='1'</where>
+        </update>
+        <update tableName="titanic">
+            <column name="pclass" value="SECOND"/>
+            <where>pclass='2'</where>
+        </update>
+        <update tableName="titanic">
+            <column name="pclass" value="THIRD"/>
+            <where>pclass='3'</where>
+        </update>
+    </changeSet>
+
+</databaseChangeLog>

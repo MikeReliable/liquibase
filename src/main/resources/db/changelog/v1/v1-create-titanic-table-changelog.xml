@@ -1,0 +1,49 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+
+    <changeSet id="v1-1" author="mike">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="titanic"/>
+            </not>
+        </preConditions>
+        <createTable tableName="titanic">
+            <column name="survived" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="pclass" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sex" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="age" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="siblings/spouses aboard" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="parents/children aboard" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fare" type="double">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="v1-2" author="mike">
+        <preConditions onFail="MARK_RAN">
+            <tableIsEmpty tableName="titanic"/>
+        </preConditions>
+        <loadData tableName="titanic" file="db/changelog/data/titanic-data.csv"/>
+    </changeSet>
+
+</databaseChangeLog>
