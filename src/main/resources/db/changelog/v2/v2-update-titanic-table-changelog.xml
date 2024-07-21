@@ -29,7 +29,6 @@
                         tableName="titanic"/>
     </changeSet>
 
-
     <changeSet id="v2-3" author="mike">
         <preConditions onFail="MARK_RAN">
             <not>

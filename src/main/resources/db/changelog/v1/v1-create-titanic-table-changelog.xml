@@ -12,6 +12,9 @@
             </not>
         </preConditions>
         <createTable tableName="titanic">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints nullable="false"/>
+            </column>
             <column name="survived" type="int">
                 <constraints nullable="false"/>
             </column>
@@ -27,10 +30,10 @@
             <column name="age" type="int">
                 <constraints nullable="false"/>
             </column>
-            <column name="siblings/spouses aboard" type="int">
+            <column name="siblings_spouses_aboard" type="int">
                 <constraints nullable="false"/>
             </column>
-            <column name="parents/children aboard" type="int">
+            <column name="parents_children_aboard" type="int">
                 <constraints nullable="false"/>
             </column>
             <column name="fare" type="double">
