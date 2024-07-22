@@ -13,9 +13,12 @@
     <h3 class="d-flex justify-content-center">Titanic passengers</h3>
     <nav class="row" aria-label="Page navigation">
         <ul class="pagination col">
-            <li class="page-item"><a class="page-link" th:href="'/list?pageNumber=0'+'&pageSize'+${pageSize}+'&pageSort='+${pageSort}">First</a></li>
             <li class="page-item"><a class="page-link"
-                                     th:href="'/list?pageNumber='+${pageNumber-1}+'&pageSize'+${pageSize}+'&pageSort='+${pageSort}">Previous</a>
+                                     th:href="'/list?pageNumber=0'+'&pageSize'+${pageSize}+'&pageSort='+${pageSort}">First</a>
+            </li>
+            <li class="page-item" th:class="${pageNumber == 0} ? 'disabled': ''">
+                <a class="page-link"
+                   th:href="'/list?pageNumber='+${pageNumber-1}+'&pageSize'+${pageSize}+'&pageSort='+${pageSort}">Previous</a>
             </li>
             <li class="page-item"><a class="page-link" th:if="${pageNumber}>1">...</a></li>
             <li class="page-item"><a class="page-link" th:if="${pageNumber}>0"
@@ -28,7 +31,7 @@
                                      th:href="'/list?pageNumber='+${pageNumber+1}+'&pageSize='+${pageSize}+'&pageSort='+${pageSort}"
                                      th:text="${pageNumber+2}"></a></li>
             <li class="page-item"><a class="page-link" th:if="${pageNumber}<${totalPages}">...</a></li>
-            <li class="page-item"><a class="page-link"
+            <li class="page-item" th:class="${pageNumber == totalPages} ? 'disabled': ''"><a class="page-link"
                                      th:href="'/list?pageNumber='+${pageNumber+1}+'&pageSize='+${pageSize}+'&pageSort='+${pageSort}">Next</a>
             </li>
             <li class="page-item"><a class="page-link"
@@ -52,16 +55,54 @@
         <tr>
             <td>Survived</td>
             <td>Pclass</td>
-            <td>Name <a th:if="${pageSort}" th:href="'/list?pageNumber='+${pageNumber}+'&pageSize='+${pageSize}+'&pageSort=name'"><i
-                    class="bi bi-sort-down-alt"></i></a>
+            <td th:unless="${pageSort =='name'}">Name
+                <a class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
+                   th:href="'/list?pageNumber='+${pageNumber}+'&pageSize='+${pageSize}+'&pageSort=name'"><i
+                        class="bi bi-sort-down-alt"></i></a>
+            </td>
+            <td th:if="${pageSort =='name'}">Name
+                <a th:if="${direction == 'ASC'}"
+                   class="link-danger link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
+                   th:href="'/list?pageNumber='+${pageNumber}+'&pageSize='+${pageSize}+'&pageSort=name&&direction=DESC'">
+                    <i th:if="${direction == 'ASC'}" class="bi bi-sort-down-alt"></i></a>
+                <a th:if="${direction == 'DESC'}"
+                   class="link-danger link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
+                   th:href="'/list?pageNumber='+${pageNumber}+'&pageSize='+${pageSize}+'&pageSort=name&&direction=ASC'">
+                    <i class="bi bi-sort-up-alt"></i></a>
             </td>
             <td>Sex</td>
-            <td>Age <a th:href="'/list?pageNumber='+${pageNumber}+'&pageSize='+${pageSize}+'&pageSort=age'"><i
-                    class="bi bi-sort-down-alt"></i></a></i></td>
+            <td th:unless="${pageSort =='age'}">Age
+                <a class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
+                   th:href="'/list?pageNumber='+${pageNumber}+'&pageSize='+${pageSize}+'&pageSort=age'"><i
+                        class="bi bi-sort-down-alt"></i></a>
+            </td>
+            <td th:if="${pageSort =='age'}">Age
+                <a th:if="${direction == 'ASC'}"
+                   class="link-danger link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
+                   th:href="'/list?pageNumber='+${pageNumber}+'&pageSize='+${pageSize}+'&pageSort=age&&direction=DESC'">
+                    <i th:if="${direction == 'ASC'}" class="bi bi-sort-down-alt"></i></a>
+                <a th:if="${direction == 'DESC'}"
+                   class="link-danger link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
+                   th:href="'/list?pageNumber='+${pageNumber}+'&pageSize='+${pageSize}+'&pageSort=age&&direction=ASC'">
+                    <i class="bi bi-sort-up-alt"></i></a>
+            </td>
             <td>Siblings/Spouses Aboard</td>
             <td>Parents/Children Aboard</td>
-            <td>Fare <a th:href="'/list?pageNumber='+${pageNumber}+'&pageSize='+${pageSize}+'&pageSort=fare'"><i
-                    class="bi bi-sort-down-alt"></i></a></i></td>
+            <td th:unless="${pageSort =='fare'}">Fare
+                <a class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
+                   th:href="'/list?pageNumber='+${pageNumber}+'&pageSize='+${pageSize}+'&pageSort=fare'"><i
+                        class="bi bi-sort-down-alt"></i></a>
+            </td>
+            <td th:if="${pageSort =='fare'}">Fare
+                <a th:if="${direction == 'ASC'}"
+                   class="link-danger link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
+                   th:href="'/list?pageNumber='+${pageNumber}+'&pageSize='+${pageSize}+'&pageSort=fare&&direction=DESC'">
+                    <i th:if="${direction == 'ASC'}" class="bi bi-sort-down-alt"></i></a>
+                <a th:if="${direction == 'DESC'}"
+                   class="link-danger link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
+                   th:href="'/list?pageNumber='+${pageNumber}+'&pageSize='+${pageSize}+'&pageSort=fare&&direction=ASC'">
+                    <i class="bi bi-sort-up-alt"></i></a>
+            </td>
         </tr>
         <tbody class="table-group-divider">
         <tr th:each="passenger: ${passengerList}" th:object="${passenger}">
