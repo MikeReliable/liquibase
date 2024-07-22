@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.mike.liquibase.domain.Passenger;
 import ru.mike.liquibase.repo.PassengersRepo;
@@ -25,14 +26,15 @@ public class LiquibaseController {
                        @RequestParam(value = "pageNumber", defaultValue = "0") Integer pageNumber,
                        @RequestParam(value = "pageSort", defaultValue = "id") String pageSort,
                        @RequestParam(value = "direction", defaultValue = "ASC") String direction,
+                       @RequestParam(value = "name", defaultValue = " ") String name,
                        Model model) {
         Page<Passenger> passengerList;
         if (direction.equals("ASC")) {
             Pageable pageableASC = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.ASC, pageSort));
-            passengerList = passengersRepo.findAll(pageableASC);
+            passengerList = passengersRepo.findAllByNameContains(name, pageableASC);
         } else {
             Pageable pageableDESC = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, pageSort));
-            passengerList = passengersRepo.findAll(pageableDESC);
+            passengerList = passengersRepo.findAllByNameContains(name, pageableDESC);
         }
         int totalPages = passengerList.getTotalPages();
         model.addAttribute("passengerList", passengerList);
@@ -41,6 +43,34 @@ public class LiquibaseController {
         model.addAttribute("pageSize", pageSize);
         model.addAttribute("pageSort", pageSort);
         model.addAttribute("direction", direction);
+        model.addAttribute("name", name);
+        return "index";
+    }
+
+    @PostMapping(path = "list")
+    public String listSorted(@ModelAttribute Passenger passenger,
+                             @RequestParam(value = "pageSize", defaultValue = "50") Integer pageSize,
+                             @RequestParam(value = "pageNumber", defaultValue = "0") Integer pageNumber,
+                             @RequestParam(value = "pageSort", defaultValue = "id") String pageSort,
+                             @RequestParam(value = "direction", defaultValue = "ASC") String direction,
+                             @RequestParam(value = "name", defaultValue = " ") String name,
+                             Model model) {
+        Page<Passenger> passengerList;
+        if (direction.equals("ASC")) {
+            Pageable pageableASC = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.ASC, pageSort));
+            passengerList = passengersRepo.findAllByNameContains(name, pageableASC);
+        } else {
+            Pageable pageableDESC = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, pageSort));
+            passengerList = passengersRepo.findAllByNameContains(name, pageableDESC);
+        }
+        int totalPages = passengerList.getTotalPages();
+        model.addAttribute("passengerList", passengerList);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("pageNumber", pageNumber);
+        model.addAttribute("pageSize", pageSize);
+        model.addAttribute("pageSort", pageSort);
+        model.addAttribute("direction", direction);
+        model.addAttribute("name", name);
         return "index";
     }
 
