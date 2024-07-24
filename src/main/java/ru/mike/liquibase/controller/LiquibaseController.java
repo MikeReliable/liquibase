@@ -27,6 +27,7 @@ public class LiquibaseController {
                        @RequestParam(value = "pageSort", defaultValue = "id") String pageSort,
                        @RequestParam(value = "direction", defaultValue = "ASC") String direction,
                        @RequestParam(value = "name", defaultValue = " ") String name,
+                       @RequestParam(value = "survived", required = false) boolean survived,
                        Model model) {
         Page<Passenger> passengerList;
         if (direction.equals("ASC")) {
@@ -36,6 +37,14 @@ public class LiquibaseController {
             Pageable pageableDESC = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, pageSort));
             passengerList = passengersRepo.findAllByNameContains(name, pageableDESC);
         }
+        int survivedPassengers = (int) passengerList.stream()
+                .filter(Passenger::isSurvived)
+                .count();
+        int hasRelatives = (int) passengerList.stream()
+                .filter(p -> p.getParentsChildrenAboard() > 0 || p.getSiblingsSpousesAboard() > 0)
+                .count();
+        Double fareTotal = passengerList.stream().mapToDouble(Passenger::getFare).sum();
+
         int totalPages = passengerList.getTotalPages();
         model.addAttribute("passengerList", passengerList);
         model.addAttribute("totalPages", totalPages);
@@ -44,6 +53,10 @@ public class LiquibaseController {
         model.addAttribute("pageSort", pageSort);
         model.addAttribute("direction", direction);
         model.addAttribute("name", name);
+        model.addAttribute("survived", survived);
+        model.addAttribute("survivedPassengers", survivedPassengers);
+        model.addAttribute("hasRelatives", hasRelatives);
+        model.addAttribute("fareTotal", fareTotal);
         return "index";
     }
 
@@ -54,7 +67,48 @@ public class LiquibaseController {
                              @RequestParam(value = "pageSort", defaultValue = "id") String pageSort,
                              @RequestParam(value = "direction", defaultValue = "ASC") String direction,
                              @RequestParam(value = "name", defaultValue = " ") String name,
+                             @RequestParam(value = "survived", required = false) boolean survived,
                              Model model) {
+        Page<Passenger> passengerList;
+        if (direction.equals("ASC")) {
+            Pageable pageableASC = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.ASC, pageSort));
+            passengerList = passengersRepo.findAllByNameContains(name, pageableASC);
+        } else {
+            Pageable pageableDESC = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, pageSort));
+            passengerList = passengersRepo.findAllByNameContains(name, pageableDESC);
+        }
+        int survivedPassengers = (int) passengerList.stream()
+                .filter(Passenger::isSurvived)
+                .count();
+        int hasRelatives = (int) passengerList.stream()
+                .filter(p -> p.getParentsChildrenAboard() > 0 || p.getSiblingsSpousesAboard() > 0)
+                .count();
+        Double fareTotal = passengerList.stream().mapToDouble(Passenger::getFare).sum();
+
+        int totalPages = passengerList.getTotalPages();
+        model.addAttribute("passengerList", passengerList);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("pageNumber", pageNumber);
+        model.addAttribute("pageSize", pageSize);
+        model.addAttribute("pageSort", pageSort);
+        model.addAttribute("direction", direction);
+        model.addAttribute("name", name);
+        model.addAttribute("survived", survived);
+        model.addAttribute("survivedPassengers", survivedPassengers);
+        model.addAttribute("hasRelatives", hasRelatives);
+        model.addAttribute("fareTotal", fareTotal);
+        return "index";
+    }
+
+    @PostMapping(path = "listFiltered")
+    public String listFiltered(@ModelAttribute Passenger passenger,
+                               @RequestParam(value = "pageSize", defaultValue = "50") Integer pageSize,
+                               @RequestParam(value = "pageNumber", defaultValue = "0") Integer pageNumber,
+                               @RequestParam(value = "pageSort", defaultValue = "id") String pageSort,
+                               @RequestParam(value = "direction", defaultValue = "ASC") String direction,
+                               @RequestParam(value = "name", defaultValue = " ") String name,
+                               @RequestParam(value = "survived", required = false) boolean survived,
+                               Model model) {
         Page<Passenger> passengerList;
         if (direction.equals("ASC")) {
             Pageable pageableASC = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.ASC, pageSort));
@@ -71,6 +125,7 @@ public class LiquibaseController {
         model.addAttribute("pageSort", pageSort);
         model.addAttribute("direction", direction);
         model.addAttribute("name", name);
+        model.addAttribute("survived", survived);
         return "index";
     }
 

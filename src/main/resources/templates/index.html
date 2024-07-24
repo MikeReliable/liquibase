@@ -14,25 +14,38 @@
 
     <h3 class="d-flex justify-content-center my-2">Titanic passengers</h3>
     <form class="d-flex w-75" role="search" action="#" th:action="@{/list}" method="post">
-        <input class="form-control me-2" type="text" placeholder="Search passengers by name" aria-label="Search" name="name" th:value="${name}">
+        <input class="form-control me-2" type="text" placeholder="Search passengers by name" aria-label="Search"
+               name="name" th:value="${name}">
         <button class="btn btn-sm btn-outline-success" type="submit">Search</button>
     </form>
-    <div class="d-flex justify-content-center my-2">
-        <div class="btn-group my-2" role="group" aria-label="Basic checkbox toggle button group">
-            <input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off">
-            <label class="btn btn-outline-primary" for="btncheck1">Survived</label>
 
-            <input type="checkbox" class="btn-check" id="btncheck2" autocomplete="off">
-            <label class="btn btn-outline-primary" for="btncheck2">Age>16</label>
-
-            <input type="checkbox" class="btn-check" id="btncheck3" autocomplete="off">
-            <label class="btn btn-outline-primary" for="btncheck3">Males</label>
-
-            <input type="checkbox" class="btn-check" id="btncheck4" autocomplete="off">
-            <label class="btn btn-outline-primary" for="btncheck4">No relatives</label>
+    <form class="d-flex justify-content-center my-3" action="#" th:action="@{/listFiltered}" method="post">
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+            <label class="form-check-label" for="defaultCheck1">
+                Survived
+            </label>
         </div>
-    </div>
-
+        <div class="form-check form-check-inline mx-3">
+            <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
+            <label class="form-check-label" for="defaultCheck2">
+                Age>16
+            </label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" value="" id="defaultCheck3">
+            <label class="form-check-label" for="defaultCheck3">
+                Males
+            </label>
+        </div>
+        <div class="form-check form-check-inline mx-3">
+            <input class="form-check-input" type="checkbox" value="" id="defaultCheck4">
+            <label class="form-check-label" for="defaultCheck3">
+                No relatives
+            </label>
+        </div>
+        <button class="btn btn-sm btn-outline-secondary" type="submit">Filter</button>
+    </form>
 
     <nav class="row" aria-label="Page navigation">
         <ul class="pagination col">
@@ -80,8 +93,8 @@
             <td>Pclass</td>
             <td th:unless="${pageSort =='name'}">Name
                 <a class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-                   th:href="'/list?pageNumber='+${pageNumber}+'&pageSize='+${pageSize}+'&pageSort=name&name='+${name}"><i
-                        class="bi bi-sort-down-alt"></i></a>
+                   th:href="'/list?pageNumber='+${pageNumber}+'&pageSize='+${pageSize}+'&pageSort=name&name='+${name}">
+                    <i class="bi bi-sort-down-alt"></i></a>
             </td>
             <td th:if="${pageSort =='name'}">Name
                 <a th:if="${direction == 'ASC'}"
@@ -96,8 +109,8 @@
             <td>Sex</td>
             <td th:unless="${pageSort =='age'}">Age
                 <a class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-                   th:href="'/list?pageNumber='+${pageNumber}+'&pageSize='+${pageSize}+'&name='+${name}+'&pageSort=age'"><i
-                        class="bi bi-sort-down-alt"></i></a>
+                   th:href="'/list?pageNumber='+${pageNumber}+'&pageSize='+${pageSize}+'&name='+${name}+'&pageSort=age'">
+                    <i class="bi bi-sort-down-alt"></i></a>
             </td>
             <td th:if="${pageSort =='age'}">Age
                 <a th:if="${direction == 'ASC'}"
@@ -113,8 +126,8 @@
             <td>Parents/Children Aboard</td>
             <td th:unless="${pageSort =='fare'}">Fare
                 <a class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-                   th:href="'/list?pageNumber='+${pageNumber}+'&pageSize='+${pageSize}+'&name='+${name}+'&pageSort=fare'"><i
-                        class="bi bi-sort-down-alt"></i></a>
+                   th:href="'/list?pageNumber='+${pageNumber}+'&pageSize='+${pageSize}+'&name='+${name}+'&pageSort=fare'">
+                    <i class="bi bi-sort-down-alt"></i></a>
             </td>
             <td th:if="${pageSort =='fare'}">Fare
                 <a th:if="${direction == 'ASC'}"
@@ -145,19 +158,19 @@
         <div class="col">
             <label for="survivors" class="col-sm-2 col-form-label">Number of survivors:</label>
             <div class="col-sm-6">
-                <input type="text" readonly class="form-control-plaintext" id="survivors" value="value">
+                <input type="text" readonly class="form-control-plaintext" id="survivors" th:value="${survivedPassengers}">
             </div>
         </div>
         <div class="col">
             <label for="relatives" class="col-sm-2 col-form-label">People with relatives:</label>
             <div class="col-sm-6">
-                <input type="text" readonly class="form-control-plaintext" id="relatives" value="value">
+                <input type="text" readonly class="form-control-plaintext" id="relatives" th:value="${hasRelatives}">
             </div>
         </div>
         <div class="col">
             <label for="fare" class="col-sm-2 col-form-label">Total fare:</label>
             <div class="col-sm-6">
-                <input type="text" readonly class="form-control-plaintext" id="fare" value="value">
+                <input type="text" readonly class="form-control-plaintext" id="fare" th:value="${fareTotal}">
             </div>
         </div>
     </div>
