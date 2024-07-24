@@ -15,7 +15,6 @@ import ru.mike.liquibase.domain.Passenger;
 import ru.mike.liquibase.repo.PassengersRepo;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 public class LiquibaseController {

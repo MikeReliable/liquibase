@@ -13,12 +13,4 @@ public interface PassengersRepo extends JpaRepository<Passenger, Integer> {
 
     List<Passenger> findAllByNameContains(String name);
 
-    Page<Passenger> findAllByNameContainsAndSurvived(String name, boolean survived, Pageable pageable);
-
-    Page<Passenger> findAllBySurvived(boolean survived, Pageable pageable);
-
-    Page<Passenger> findAllBySexEquals(String male, Pageable pageable);
-
-    Page<Passenger> findAllBySiblingsSpousesAboardEqualsAndParentsChildrenAboardEquals(int siblingsSpousesAboard, int parentsChildrenAboard, Pageable pageable);
-
 }
