@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ru.mike.liquibase.domain.Passenger;
 import ru.mike.liquibase.repo.PassengersRepo;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Controller
 public class LiquibaseController {
 
@@ -29,14 +32,15 @@ public class LiquibaseController {
                        @RequestParam(value = "name", defaultValue = " ") String name,
                        @RequestParam(value = "survived", required = false) boolean survived,
                        Model model) {
-        Page<Passenger> passengerList;
+        Page<Passenger> passengerPage;
         if (direction.equals("ASC")) {
             Pageable pageableASC = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.ASC, pageSort));
-            passengerList = passengersRepo.findAllByNameContains(name, pageableASC);
+            passengerPage = passengersRepo.findAllByNameContains(name, pageableASC);
         } else {
             Pageable pageableDESC = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, pageSort));
-            passengerList = passengersRepo.findAllByNameContains(name, pageableDESC);
+            passengerPage = passengersRepo.findAllByNameContains(name, pageableDESC);
         }
+        List<Passenger> passengerList = passengersRepo.findAllByNameContains(name);
         int survivedPassengers = (int) passengerList.stream()
                 .filter(Passenger::isSurvived)
                 .count();
@@ -45,8 +49,8 @@ public class LiquibaseController {
                 .count();
         Double fareTotal = passengerList.stream().mapToDouble(Passenger::getFare).sum();
 
-        int totalPages = passengerList.getTotalPages();
-        model.addAttribute("passengerList", passengerList);
+        int totalPages = passengerPage.getTotalPages();
+        model.addAttribute("passengerList", passengerPage);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("pageNumber", pageNumber);
         model.addAttribute("pageSize", pageSize);
@@ -69,14 +73,15 @@ public class LiquibaseController {
                              @RequestParam(value = "name", defaultValue = " ") String name,
                              @RequestParam(value = "survived", required = false) boolean survived,
                              Model model) {
-        Page<Passenger> passengerList;
+        Page<Passenger> passengerPage;
         if (direction.equals("ASC")) {
             Pageable pageableASC = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.ASC, pageSort));
-            passengerList = passengersRepo.findAllByNameContains(name, pageableASC);
+            passengerPage = passengersRepo.findAllByNameContains(name, pageableASC);
         } else {
             Pageable pageableDESC = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, pageSort));
-            passengerList = passengersRepo.findAllByNameContains(name, pageableDESC);
+            passengerPage = passengersRepo.findAllByNameContains(name, pageableDESC);
         }
+        List<Passenger> passengerList = passengersRepo.findAllByNameContains(name);
         int survivedPassengers = (int) passengerList.stream()
                 .filter(Passenger::isSurvived)
                 .count();
@@ -85,8 +90,8 @@ public class LiquibaseController {
                 .count();
         Double fareTotal = passengerList.stream().mapToDouble(Passenger::getFare).sum();
 
-        int totalPages = passengerList.getTotalPages();
-        model.addAttribute("passengerList", passengerList);
+        int totalPages = passengerPage.getTotalPages();
+        model.addAttribute("passengerList", passengerPage);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("pageNumber", pageNumber);
         model.addAttribute("pageSize", pageSize);
@@ -109,16 +114,16 @@ public class LiquibaseController {
                                @RequestParam(value = "name", defaultValue = " ") String name,
                                @RequestParam(value = "survived", required = false) boolean survived,
                                Model model) {
-        Page<Passenger> passengerList;
+        Page<Passenger> passengerPage;
         if (direction.equals("ASC")) {
             Pageable pageableASC = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.ASC, pageSort));
-            passengerList = passengersRepo.findAllByNameContains(name, pageableASC);
+            passengerPage = passengersRepo.findAllByNameContains(name, pageableASC);
         } else {
             Pageable pageableDESC = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, pageSort));
-            passengerList = passengersRepo.findAllByNameContains(name, pageableDESC);
+            passengerPage = passengersRepo.findAllByNameContains(name, pageableDESC);
         }
-        int totalPages = passengerList.getTotalPages();
-        model.addAttribute("passengerList", passengerList);
+        int totalPages = passengerPage.getTotalPages();
+        model.addAttribute("passengerList", passengerPage);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("pageNumber", pageNumber);
         model.addAttribute("pageSize", pageSize);
