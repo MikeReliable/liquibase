@@ -51,7 +51,7 @@
             </li>
             <li class="page-item" th:class="${pageNumber == 0} ? 'disabled': ''">
                 <a class="page-link"
-                   th:href="'/list?pageNumber='+${pageNumber-1}+'&pageSize'+${pageSize}+'&pageSort='+${pageSort}+'&name='+${name}+'&survived='+${survived}+'&adult='+${adult}+'&males='+${males}+'&noRelatives='+${noRelatives}">Previous</a>
+                   th:href="'/list?pageNumber='+${pageNumber-1}+'&pageSize='+${pageSize}+'&pageSort='+${pageSort}+'&name='+${name}+'&survived='+${survived}+'&adult='+${adult}+'&males='+${males}+'&noRelatives='+${noRelatives}">Previous</a>
             </li>
             <li class="page-item"><a class="page-link" th:if="${pageNumber}>1">...</a></li>
             <li class="page-item"><a class="page-link" th:if="${pageNumber}>0"
@@ -60,27 +60,24 @@
             <li class="page-item active"><a class="page-link"
                                             th:href="'/list?pageNumber='+${pageNumber}+'&pageSize='+${pageSize}+'&pageSort='+${pageSort}+'&name='+${name}+'&survived='+${survived}+'&adult='+${adult}+'&males='+${males}+'&noRelatives='+${noRelatives}"
                                             th:text="${pageNumber+1}"></a></li>
-            <li class="page-item"><a class="page-link" th:if="${pageNumber}<${totalPages}"
-                                     th:href="'/list?pageNumber='+${pageNumber+1}+'&pageSize='+${pageSize}+'&pageSort='+${pageSort}+'&name='+${name}+'&survived='+${survived}+'&adult='+${adult}+'&males='+${males}+'&noRelatives='+${noRelatives}"
+            <li class="page-item"><a class="page-link" th:if="${pageNumber+1}<${totalPages}"
+                                     th:href="'/list?pageNumber='+${pageNumber+2}+'&pageSize='+${pageSize}+'&pageSort='+${pageSort}+'&name='+${name}+'&survived='+${survived}+'&adult='+${adult}+'&males='+${males}+'&noRelatives='+${noRelatives}"
                                      th:text="${pageNumber+2}"></a></li>
-            <li class="page-item"><a class="page-link" th:if="${pageNumber}<${totalPages}">...</a></li>
-            <li class="page-item" th:class="${pageNumber == totalPages} ? 'disabled': ''"><a class="page-link"
-                                                                                             th:href="'/list?pageNumber='+${pageNumber+1}+'&pageSize='+${pageSize}+'&pageSort='+${pageSort}+'&name='+${name}+'&survived='+${survived}+'&adult='+${adult}+'&males='+${males}+'&noRelatives='+${noRelatives}">Next</a>
+            <li class="page-item"><a class="page-link" th:if="${pageNumber+2}<${totalPages}">...</a></li>
+            <li class="page-item" th:class="${pageNumber+1 == totalPages} ? 'disabled': ''"><a class="page-link"
+                                                                                               th:href="'/list?pageNumber='+${pageNumber+1}+'&pageSize='+${pageSize}+'&pageSort='+${pageSort}+'&name='+${name}+'&survived='+${survived}+'&adult='+${adult}+'&males='+${males}+'&noRelatives='+${noRelatives}">Next</a>
             </li>
             <li class="page-item"><a class="page-link"
-                                     th:href="'/list?pageNumber='+${totalPages}+'&pageSize='+${pageSize}+'&pageSort='+${pageSort}+'&name='+${name}+'&survived='+${survived}+'&adult='+${adult}+'&males='+${males}+'&noRelatives='+${noRelatives}">Last</a>
+                                     th:href="'/list?pageNumber='+${totalPages-1}+'&pageSize='+${pageSize}+'&pageSort='+${pageSort}+'&name='+${name}+'&survived='+${survived}+'&adult='+${adult}+'&males='+${males}+'&noRelatives='+${noRelatives}">Last</a>
             </li>
         </ul>
         <ul class="pagination col justify-content-end">
             <li class="page-item"><a class="page-link"
-                                     th:href="'/list?pageNumber='+${pageNumber}+'&pageSize=10&pageSort='+${pageSort}+'&name='+${name}+'&survived='+${survived}+'&adult='+${adult}+'&males='+${males}+'&noRelatives='+${noRelatives}">10</a>
-            </li>
+                                     th:href="'/list?pageNumber=0&pageSize=10&pageSort='+${pageSort}+'&name='+${name}+'&survived='+${survived}+'&adult='+${adult}+'&males='+${males}+'&noRelatives='+${noRelatives}">10</a>            </li>
             <li class="page-item"><a class="page-link"
-                                     th:href="'/list?pageNumber='+${pageNumber}+'&pageSize=20&pageSort='+${pageSort}+'&name='+${name}+'&survived='+${survived}+'&adult='+${adult}+'&males='+${males}+'&noRelatives='+${noRelatives}">20</a>
-            </li>
-            <li class="page-item"><a class="page-link"
-                                     th:href="'/list?pageNumber='+${pageNumber}+'&pageSize=50&pageSort='+${pageSort}+'&name='+${name}+'&survived='+${survived}+'&adult='+${adult}+'&males='+${males}+'&noRelatives='+${noRelatives}">50</a>
-            </li>
+                                     th:href="'/list?pageNumber=0&pageSize=20&pageSort='+${pageSort}+'&name='+${name}+'&survived='+${survived}+'&adult='+${adult}+'&males='+${males}+'&noRelatives='+${noRelatives}">20</a>
+            </li>            <li class="page-item"><a class="page-link"
+                                     th:href="'/list?pageNumber=0&pageSize=50&pageSort='+${pageSort}+'&name='+${name}+'&survived='+${survived}+'&adult='+${adult}+'&males='+${males}+'&noRelatives='+${noRelatives}">50</a>            </li>
         </ul>
     </nav>
 
