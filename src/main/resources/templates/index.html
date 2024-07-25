@@ -13,76 +13,73 @@
 
 
     <h3 class="d-flex justify-content-center my-2">Titanic passengers</h3>
-    <form class="d-flex w-75" role="search" action="#" th:action="@{/list}" method="post">
-        <input class="form-control me-2" type="text" placeholder="Search passengers by name" aria-label="Search"
-               name="name" th:value="${name}">
-        <button class="btn btn-sm btn-outline-success" type="submit">Search</button>
-    </form>
-
-    <form class="d-flex justify-content-center my-3" action="#" th:action="@{/listFiltered}" method="post">
-        <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-            <label class="form-check-label" for="defaultCheck1">
-                Survived
-            </label>
+    <form role="search" action="#" th:action="@{/list}" method="post" th:object="${filter}">
+        <div class="d-flex w-75">
+            <input class="form-control me-2" type="text" placeholder="Search passengers by name" aria-label="Search"
+                   name="name" th:value="${name}">
+            <button class="btn btn-sm btn-outline-success" type="submit">Search</button>
         </div>
-        <div class="form-check form-check-inline mx-3">
-            <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
-            <label class="form-check-label" for="defaultCheck2">
-                Age>16
-            </label>
+        <div class="d-flex justify-content-center my-2">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="survived" id="survived"
+                       th:value="${survived}" th:field="*{survived}" th:checked="${survived}">
+                <label class="form-check-label mx-2" for="survived">Survived</label>
+            </div>
+            <div class="form-check form-check-inline mx-3">
+                <input class="form-check-input" type="checkbox" name="adult" id="adult"
+                       th:value="${adult}" th:field="*{adult}" th:checked="${adult}">
+                <label class="form-check-label mx-2" for="adult">Age>16</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="males" id="males"
+                       th:value="${males}" th:field="*{males}" th:checked="${males}">
+                <label class="form-check-label mx-2" for="males">Males</label>
+            </div>
+            <div class="form-check form-check-inline mx-3">
+                <input class="form-check-input" type="checkbox" name="noRelatives" id="noRelatives"
+                       th:value="${noRelatives}" th:field="*{noRelatives}" th:checked="${noRelatives}">
+                <label class="form-check-label mx-2" for="males">No relatives</label>
+            </div>
+            <button class="btn btn-sm btn-outline-secondary" type="submit">Filter</button>
         </div>
-        <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" value="" id="defaultCheck3">
-            <label class="form-check-label" for="defaultCheck3">
-                Males
-            </label>
-        </div>
-        <div class="form-check form-check-inline mx-3">
-            <input class="form-check-input" type="checkbox" value="" id="defaultCheck4">
-            <label class="form-check-label" for="defaultCheck3">
-                No relatives
-            </label>
-        </div>
-        <button class="btn btn-sm btn-outline-secondary" type="submit">Filter</button>
     </form>
 
     <nav class="row" aria-label="Page navigation">
         <ul class="pagination col">
             <li class="page-item"><a class="page-link"
-                                     th:href="'/list?pageNumber=0'+'&pageSize'+${pageSize}+'&pageSort='+${pageSort}+'&name='+${name}">First</a>
+                                     th:href="'/list?pageNumber=0'+'&pageSize'+${pageSize}+'&pageSort='+${pageSort}+'&name='+${name}+'&survived='+${survived}+'&adult='+${adult}+'&males='+${males}+'&noRelatives='+${noRelatives}">First</a>
             </li>
             <li class="page-item" th:class="${pageNumber == 0} ? 'disabled': ''">
                 <a class="page-link"
-                   th:href="'/list?pageNumber='+${pageNumber-1}+'&pageSize'+${pageSize}+'&pageSort='+${pageSort}+'&name='+${name}">Previous</a>
+                   th:href="'/list?pageNumber='+${pageNumber-1}+'&pageSize'+${pageSize}+'&pageSort='+${pageSort}+'&name='+${name}+'&survived='+${survived}+'&adult='+${adult}+'&males='+${males}+'&noRelatives='+${noRelatives}">Previous</a>
             </li>
             <li class="page-item"><a class="page-link" th:if="${pageNumber}>1">...</a></li>
             <li class="page-item"><a class="page-link" th:if="${pageNumber}>0"
-                                     th:href="'/list?pageNumber='+${pageNumber-1}+'&pageSize='+${pageSize}+'&pageSort='+${pageSort}+'&name='+${name}"
+                                     th:href="'/list?pageNumber='+${pageNumber-1}+'&pageSize='+${pageSize}+'&pageSort='+${pageSort}+'&name='+${name}+'&survived='+${survived}+'&adult='+${adult}+'&males='+${males}+'&noRelatives='+${noRelatives}"
                                      th:text="${pageNumber}"></a></li>
             <li class="page-item active"><a class="page-link"
-                                            th:href="'/list?pageNumber='+${pageNumber}+'&pageSize='+${pageSize}+'&pageSort='+${pageSort}+'&name='+${name}"
+                                            th:href="'/list?pageNumber='+${pageNumber}+'&pageSize='+${pageSize}+'&pageSort='+${pageSort}+'&name='+${name}+'&survived='+${survived}+'&adult='+${adult}+'&males='+${males}+'&noRelatives='+${noRelatives}"
                                             th:text="${pageNumber+1}"></a></li>
             <li class="page-item"><a class="page-link" th:if="${pageNumber}<${totalPages}"
-                                     th:href="'/list?pageNumber='+${pageNumber+1}+'&pageSize='+${pageSize}+'&pageSort='+${pageSort}+'&name='+${name}"
+                                     th:href="'/list?pageNumber='+${pageNumber+1}+'&pageSize='+${pageSize}+'&pageSort='+${pageSort}+'&name='+${name}+'&survived='+${survived}+'&adult='+${adult}+'&males='+${males}+'&noRelatives='+${noRelatives}"
                                      th:text="${pageNumber+2}"></a></li>
             <li class="page-item"><a class="page-link" th:if="${pageNumber}<${totalPages}">...</a></li>
             <li class="page-item" th:class="${pageNumber == totalPages} ? 'disabled': ''"><a class="page-link"
-                                                                                             th:href="'/list?pageNumber='+${pageNumber+1}+'&pageSize='+${pageSize}+'&pageSort='+${pageSort}+'&name='+${name}">Next</a>
+                                                                                             th:href="'/list?pageNumber='+${pageNumber+1}+'&pageSize='+${pageSize}+'&pageSort='+${pageSort}+'&name='+${name}+'&survived='+${survived}+'&adult='+${adult}+'&males='+${males}+'&noRelatives='+${noRelatives}">Next</a>
             </li>
             <li class="page-item"><a class="page-link"
-                                     th:href="'/list?pageNumber='+${totalPages}+'&pageSize='+${pageSize}+'&pageSort='+${pageSort}+'&name='+${name}">Last</a>
+                                     th:href="'/list?pageNumber='+${totalPages}+'&pageSize='+${pageSize}+'&pageSort='+${pageSort}+'&name='+${name}+'&survived='+${survived}+'&adult='+${adult}+'&males='+${males}+'&noRelatives='+${noRelatives}">Last</a>
             </li>
         </ul>
         <ul class="pagination col justify-content-end">
             <li class="page-item"><a class="page-link"
-                                     th:href="'/list?pageNumber='+${pageNumber}+'&pageSize=10&pageSort='+${pageSort}+'&name='+${name}">10</a>
+                                     th:href="'/list?pageNumber='+${pageNumber}+'&pageSize=10&pageSort='+${pageSort}+'&name='+${name}+'&survived='+${survived}+'&adult='+${adult}+'&males='+${males}+'&noRelatives='+${noRelatives}">10</a>
             </li>
             <li class="page-item"><a class="page-link"
-                                     th:href="'/list?pageNumber='+${pageNumber}+'&pageSize=20&pageSort='+${pageSort}+'&name='+${name}">20</a>
+                                     th:href="'/list?pageNumber='+${pageNumber}+'&pageSize=20&pageSort='+${pageSort}+'&name='+${name}+'&survived='+${survived}+'&adult='+${adult}+'&males='+${males}+'&noRelatives='+${noRelatives}">20</a>
             </li>
             <li class="page-item"><a class="page-link"
-                                     th:href="'/list?pageNumber='+${pageNumber}+'&pageSize=50&pageSort='+${pageSort}+'&name='+${name}">50</a>
+                                     th:href="'/list?pageNumber='+${pageNumber}+'&pageSize=50&pageSort='+${pageSort}+'&name='+${name}+'&survived='+${survived}+'&adult='+${adult}+'&males='+${males}+'&noRelatives='+${noRelatives}">50</a>
             </li>
         </ul>
     </nav>
@@ -93,55 +90,55 @@
             <td>Pclass</td>
             <td th:unless="${pageSort =='name'}">Name
                 <a class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-                   th:href="'/list?pageNumber='+${pageNumber}+'&pageSize='+${pageSize}+'&pageSort=name&name='+${name}">
+                   th:href="'/list?pageNumber='+${pageNumber}+'&pageSize='+${pageSize}+'&pageSort=name&name='+${name}+'&survived='+${survived}+'&adult='+${adult}+'&males='+${males}+'&noRelatives='+${noRelatives}">
                     <i class="bi bi-sort-down-alt"></i></a>
             </td>
             <td th:if="${pageSort =='name'}">Name
                 <a th:if="${direction == 'ASC'}"
                    class="link-danger link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-                   th:href="'/list?pageNumber='+${pageNumber}+'&pageSize='+${pageSize}+'&pageSort=name&name='+${name}+'&direction=DESC'">
+                   th:href="'/list?pageNumber='+${pageNumber}+'&pageSize='+${pageSize}+'&pageSort=name&name='+${name}+'&direction=DESC'+'&survived='+${survived}+'&adult='+${adult}+'&males='+${males}+'&noRelatives='+${noRelatives}">
                     <i th:if="${direction == 'ASC'}" class="bi bi-sort-down-alt"></i></a>
                 <a th:if="${direction == 'DESC'}"
                    class="link-danger link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-                   th:href="'/list?pageNumber='+${pageNumber}+'&pageSize='+${pageSize}+'&pageSort=name&name='+${name}+'&direction=ASC'">
+                   th:href="'/list?pageNumber='+${pageNumber}+'&pageSize='+${pageSize}+'&pageSort=name&name='+${name}+'&direction=ASC'+'&survived='+${survived}+'&adult='+${adult}+'&males='+${males}+'&noRelatives='+${noRelatives}">
                     <i class="bi bi-sort-up-alt"></i></a>
             </td>
             <td>Sex</td>
             <td th:unless="${pageSort =='age'}">Age
                 <a class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-                   th:href="'/list?pageNumber='+${pageNumber}+'&pageSize='+${pageSize}+'&name='+${name}+'&pageSort=age'">
+                   th:href="'/list?pageNumber='+${pageNumber}+'&pageSize='+${pageSize}+'&name='+${name}+'&pageSort=age'+'&survived='+${survived}+'&adult='+${adult}+'&males='+${males}+'&noRelatives='+${noRelatives}">
                     <i class="bi bi-sort-down-alt"></i></a>
             </td>
             <td th:if="${pageSort =='age'}">Age
                 <a th:if="${direction == 'ASC'}"
                    class="link-danger link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-                   th:href="'/list?pageNumber='+${pageNumber}+'&pageSize='+${pageSize}+'&pageSort=age&name='+${name}+'&direction=DESC'">
+                   th:href="'/list?pageNumber='+${pageNumber}+'&pageSize='+${pageSize}+'&pageSort=age&name='+${name}+'&direction=DESC'+'&survived='+${survived}+'&adult='+${adult}+'&males='+${males}+'&noRelatives='+${noRelatives}">
                     <i th:if="${direction == 'ASC'}" class="bi bi-sort-down-alt"></i></a>
                 <a th:if="${direction == 'DESC'}"
                    class="link-danger link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-                   th:href="'/list?pageNumber='+${pageNumber}+'&pageSize='+${pageSize}+'&pageSort=age&name='+${name}+'&direction=ASC'">
+                   th:href="'/list?pageNumber='+${pageNumber}+'&pageSize='+${pageSize}+'&pageSort=age&name='+${name}+'&direction=ASC'+'&survived='+${survived}+'&adult='+${adult}+'&males='+${males}+'&noRelatives='+${noRelatives}">
                     <i class="bi bi-sort-up-alt"></i></a>
             </td>
             <td>Siblings/Spouses Aboard</td>
             <td>Parents/Children Aboard</td>
             <td th:unless="${pageSort =='fare'}">Fare
                 <a class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-                   th:href="'/list?pageNumber='+${pageNumber}+'&pageSize='+${pageSize}+'&name='+${name}+'&pageSort=fare'">
+                   th:href="'/list?pageNumber='+${pageNumber}+'&pageSize='+${pageSize}+'&name='+${name}+'&pageSort=fare'+'&survived='+${survived}+'&adult='+${adult}+'&males='+${males}+'&noRelatives='+${noRelatives}">
                     <i class="bi bi-sort-down-alt"></i></a>
             </td>
             <td th:if="${pageSort =='fare'}">Fare
                 <a th:if="${direction == 'ASC'}"
                    class="link-danger link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-                   th:href="'/list?pageNumber='+${pageNumber}+'&pageSize='+${pageSize}+'&pageSort=fare&name='+${name}+'&direction=DESC'">
+                   th:href="'/list?pageNumber='+${pageNumber}+'&pageSize='+${pageSize}+'&pageSort=fare&name='+${name}+'&direction=DESC'+'&survived='+${survived}+'&adult='+${adult}+'&males='+${males}+'&noRelatives='+${noRelatives}">
                     <i th:if="${direction == 'ASC'}" class="bi bi-sort-down-alt"></i></a>
                 <a th:if="${direction == 'DESC'}"
                    class="link-danger link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-                   th:href="'/list?pageNumber='+${pageNumber}+'&pageSize='+${pageSize}+'&pageSort=fare&name='+${name}+'&direction=ASC'">
+                   th:href="'/list?pageNumber='+${pageNumber}+'&pageSize='+${pageSize}+'&pageSort=fare&name='+${name}+'&direction=ASC'+'&survived='+${survived}+'&adult='+${adult}+'&males='+${males}+'&noRelatives='+${noRelatives}">
                     <i class="bi bi-sort-up-alt"></i></a>
             </td>
         </tr>
         <tbody class="table-group-divider">
-        <tr th:each="passenger: ${passengerList}" th:object="${passenger}">
+        <tr th:each="passenger: ${passengerPage}" th:object="${passenger}">
             <td th:text="*{survived}"></td>
             <td th:text="*{pclass}"></td>
             <td th:text="*{name}"></td>
@@ -155,21 +152,22 @@
     </table>
 
     <div class="row">
-        <div class="col">
-            <label for="survivors" class="col-sm-2 col-form-label">Number of survivors:</label>
-            <div class="col-sm-6">
-                <input type="text" readonly class="form-control-plaintext" id="survivors" th:value="${survivedPassengers}">
+        <div class="col d-flex justify-content-center">
+            <label for="survivors" class="col-sm-4 col-form-label">Number of survivors:</label>
+            <div class="col-sm-4">
+                <input type="text" readonly class="form-control-plaintext" id="survivors"
+                       th:value="${survivedPassengers}">
             </div>
         </div>
-        <div class="col">
-            <label for="relatives" class="col-sm-2 col-form-label">People with relatives:</label>
-            <div class="col-sm-6">
+        <div class="col d-flex justify-content-center">
+            <label for="relatives" class="col-sm-4 col-form-label">People with relatives:</label>
+            <div class="col-sm-4">
                 <input type="text" readonly class="form-control-plaintext" id="relatives" th:value="${hasRelatives}">
             </div>
         </div>
-        <div class="col">
-            <label for="fare" class="col-sm-2 col-form-label">Total fare:</label>
-            <div class="col-sm-6">
+        <div class="col d-flex justify-content-center">
+            <label for="fare" class="col-sm-4 col-form-label">Total fare:</label>
+            <div class="col-sm-4">
                 <input type="text" readonly class="form-control-plaintext" id="fare" th:value="${fareTotal}">
             </div>
         </div>
