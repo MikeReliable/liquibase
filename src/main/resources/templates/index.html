@@ -13,11 +13,13 @@
 
     <h3 class="d-flex justify-content-center my-2">Titanic passengers</h3>
     <form role="search" action="#" th:action="@{/list}" method="post" th:object="${filter}">
+
         <div class="d-flex w-75">
             <input class="form-control me-2" type="text" placeholder="Search passengers by name" aria-label="Search"
                    name="name" th:value="${name}">
             <button class="btn btn-sm btn-outline-success" type="submit">Search</button>
         </div>
+
         <div class="d-flex justify-content-center my-2">
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox" name="survived" id="survived"
