@@ -1,6 +1,5 @@
 package ru.mike.liquibase.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Controller;
@@ -13,6 +12,7 @@ import ru.mike.liquibase.domain.Filter;
 import ru.mike.liquibase.domain.Passenger;
 import ru.mike.liquibase.repo.PassengersRepo;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -37,14 +37,26 @@ public class LiquibaseController {
                        @RequestParam(value = "noRelatives", defaultValue = "false") boolean noRelatives,
                        Model model) {
 
-//        if (direction.equals("ASC")) {
-//            Pageable pageableASC = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.ASC, pageSort));
-//            passengerPage = passengersRepo.findAllByNameContains(name, pageableASC);
-//        } else {
-//            Pageable pageableDESC = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, pageSort));
-//            passengerPage = passengersRepo.findAllByNameContains(name, pageableDESC);
-//        }
+        //extracting passenger list from database
         List<Passenger> listFilter1 = passengersRepo.findAllByNameContains(name);
+
+
+        //sorting the list of passengers from the database
+        if (!pageSort.equals("id") && direction.equals("ASC")) {
+            switch (pageSort) {
+                case "name" -> listFilter1.sort(Comparator.comparing(Passenger::getName));
+                case "age" -> listFilter1.sort(Comparator.comparing(Passenger::getAge));
+                case "fare" -> listFilter1.sort(Comparator.comparing(Passenger::getFare));
+            }
+        } else {
+            switch (pageSort) {
+                case "name" -> listFilter1.sort(Comparator.comparing(Passenger::getName).reversed());
+                case "age" -> listFilter1.sort(Comparator.comparing(Passenger::getAge).reversed());
+                case "fare" -> listFilter1.sort(Comparator.comparing(Passenger::getFare).reversed());
+            }
+        }
+
+        //filter block
         List<Passenger> finalListFilter = listFilter1;
         Supplier<Stream<Passenger>> streamFilter1 = finalListFilter::stream;
         if (survived) {
@@ -70,19 +82,15 @@ public class LiquibaseController {
                     .filter(p -> p.getParentsChildrenAboard() < 1 && p.getSiblingsSpousesAboard() < 1).toList();
         }
 
+        //pagination
         int totalPages = (int) Math.ceil((double) listFilter4.size() / pageSize);
         Page<Passenger> passengerPage;
-        Pageable pageRequest = PageRequest.of(pageNumber, pageSize);
+        Pageable pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.ASC, pageSort));
         int start = (int) pageRequest.getOffset();
         int end = Math.min((start + pageRequest.getPageSize()), listFilter4.size());
-        if (direction.equals("ASC")) {
-            Pageable pageableASC = PageRequest.of(pageNumber, pageSize);
-            passengerPage = new PageImpl<>(listFilter4.subList(start, end), pageableASC, listFilter4.size());
-        } else {
-            Pageable pageableDESC = PageRequest.of(pageNumber, pageSize);
-            passengerPage = new PageImpl<>(listFilter4.subList(start, end), pageableDESC, listFilter4.size());
-        }
+        passengerPage = new PageImpl<>(listFilter4.subList(start, end), pageRequest, listFilter4.size());
 
+        //passenger statistics block
         int survivedPassengers = (int) listFilter4.stream()
                 .filter(Passenger::isSurvived)
                 .count();
@@ -90,7 +98,6 @@ public class LiquibaseController {
                 .filter(p -> p.getParentsChildrenAboard() > 0 || p.getSiblingsSpousesAboard() > 0)
                 .count();
         Double fareTotal = listFilter4.stream().mapToDouble(Passenger::getFare).sum();
-        filter.setPassengers(passengerPage);
 
         model.addAttribute("passengerPage", passengerPage);
         model.addAttribute("totalPages", totalPages);
@@ -123,7 +130,10 @@ public class LiquibaseController {
                              @RequestParam(value = "noRelatives", defaultValue = "false") boolean noRelatives,
                              Model model) {
 
+        //extracting passenger list from database
         List<Passenger> listFilter1 = passengersRepo.findAllByNameContains(name);
+
+        //filter block
         List<Passenger> finalListFilter = listFilter1;
         Supplier<Stream<Passenger>> streamFilter1 = finalListFilter::stream;
         if (survived) {
@@ -148,18 +158,23 @@ public class LiquibaseController {
             listFilter4 = streamFilter4.get()
                     .filter(p -> p.getParentsChildrenAboard() < 1 && p.getSiblingsSpousesAboard() < 1).toList();
         }
-        Page<Passenger> passengerPage = new PageImpl<>(listFilter4);
-        List<Passenger> passengerList = listFilter4;
 
-        int totalPages = (int) Math.ceil((double) passengerPage.getTotalElements() / pageSize);
-        int survivedPassengers = (int) passengerList.stream()
+        //pagination
+        int totalPages = (int) Math.ceil((double) listFilter4.size() / pageSize);
+        Page<Passenger> passengerPage;
+        Pageable pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.ASC, pageSort));
+        int start = (int) pageRequest.getOffset();
+        int end = Math.min((start + pageRequest.getPageSize()), listFilter4.size());
+        passengerPage = new PageImpl<>(listFilter4.subList(start, end), pageRequest, listFilter4.size());
+
+        //passenger statistics block
+        int survivedPassengers = (int) listFilter4.stream()
                 .filter(Passenger::isSurvived)
                 .count();
-        int hasRelatives = (int) passengerList.stream()
+        int hasRelatives = (int) listFilter4.stream()
                 .filter(p -> p.getParentsChildrenAboard() > 0 || p.getSiblingsSpousesAboard() > 0)
                 .count();
-        Double fareTotal = passengerList.stream().mapToDouble(Passenger::getFare).sum();
-        filter.setPassengers(passengerPage);
+        Double fareTotal = listFilter4.stream().mapToDouble(Passenger::getFare).sum();
 
         model.addAttribute("passengerPage", passengerPage);
         model.addAttribute("totalPages", totalPages);

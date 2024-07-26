@@ -1,23 +1,12 @@
 package ru.mike.liquibase.domain;
 
-import org.springframework.data.domain.Page;
-
 public class Filter {
-    boolean survived;
-    boolean adult;
-    boolean males;
-    boolean noRelatives;
-    Page<Passenger> passengers;
+    private boolean survived;
+    private boolean adult;
+    private boolean males;
+    private boolean noRelatives;
 
     public Filter() {
-    }
-
-    public Filter(boolean survived, boolean adult, boolean males, boolean noRelatives, Page<Passenger> passengers) {
-        this.survived = survived;
-        this.adult = adult;
-        this.males = males;
-        this.noRelatives = noRelatives;
-        this.passengers = passengers;
     }
 
     public boolean isSurvived() {
@@ -52,11 +41,4 @@ public class Filter {
         this.noRelatives = noRelatives;
     }
 
-    public Page<Passenger> getPassengers() {
-        return passengers;
-    }
-
-    public void setPassengers(Page<Passenger> passengers) {
-        this.passengers = passengers;
-    }
 }
